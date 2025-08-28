@@ -1,8 +1,24 @@
-import React from 'react'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
+import Image from 'next/image'
 
 const Header = () => {
   return (
-    <div>Header</div>
+    <div className='fixed top-0'>
+
+      <nav>
+        <Link href="/">
+        <Image />
+        </Link>
+      </nav>
+
+
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </div>
   )
 }
 
