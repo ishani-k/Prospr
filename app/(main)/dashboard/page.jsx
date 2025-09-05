@@ -1,7 +1,13 @@
 import React from 'react'
 
 const Dashboard = () => {
-  return <div>Dashboard Page</div>
+  return(
+  <div className='px-5'>
+      <h1 className='text-6xl font-bold'>Dashboard</h1>
+
+    {/*Dashboard*/}
+  </div>
+  ) 
   
 }
 
