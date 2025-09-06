@@ -1,3 +1,4 @@
+import CreateAccountDrawer from '@/components/create-account-drawer'
 import React from 'react'
 
 function DashboardPage() {
@@ -10,6 +11,9 @@ function DashboardPage() {
 
 
       {/*Account Grids */}
+      <div>
+        <CreateAccountDrawer>open</CreateAccountDrawer>
+      </div>
 
     </div>
   )
