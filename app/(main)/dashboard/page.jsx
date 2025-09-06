@@ -1,14 +1,18 @@
 import React from 'react'
 
-const Dashboard = () => {
-  return(
-  <div className='px-5'>
-      <h1 className='text-6xl font-bold'>Dashboard</h1>
+function DashboardPage() {
+  return (
+    <div className='px-5'>
+      {/*Budget Progress */}
 
-    {/*Dashboard*/}
-  </div>
-  ) 
-  
+
+      {/*Overview */}
+
+
+      {/*Account Grids */}
+
+    </div>
+  )
 }
 
-export default Dashboard
+export default DashboardPage
