@@ -1,27 +1,36 @@
 "use client";
 import React, { useState } from 'react'
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
 import { Button } from './ui/button';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { accountSchema } from '@/app/lib/schema';
 
 const CreateAccountDrawer = ({children}) => {
 
     const [open, setOpen] = useState(false)
 
+    const {register, handleSubmit, formState: { errors }, setValue, watch, } = useForm({
+        resolver: zodResolver(accountSchema),
+        defaultValues: {
+            name: "",
+            type: "CURRENT",
+            balance: "",
+            isDefault: false
+        }
+    })
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger>{children}</DrawerTrigger>
+        <DrawerTrigger asChild>{children}</DrawerTrigger>
         <DrawerContent>
             <DrawerHeader>
-                <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-                <DrawerDescription>This action cannot be undone.</DrawerDescription>
+                <DrawerTitle>Create New Account</DrawerTitle>
             </DrawerHeader>
-            <DrawerFooter>
-                <Button>Submit</Button>
-                <DrawerClose>
-                    <Button variant="outline">Cancel</Button>
-                </DrawerClose>
-            </DrawerFooter>
+
+            <div>
+                <form></form>
+            </div>
         </DrawerContent>
     </Drawer>
   )
