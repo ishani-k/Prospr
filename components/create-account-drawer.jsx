@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchema } from '@/app/lib/schema';
 import { Input } from './ui/input';
-import { Radio, RadioIcon, RadioReceiver, RadioTowerIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 const CreateAccountDrawer = ({children}) => {
@@ -50,7 +49,8 @@ const CreateAccountDrawer = ({children}) => {
                     </div>
                     <div className='space-y-2'>
                         <label htmlFor="type" className='text-sm font-medium'>Account Type</label>
-                        <Select>
+                        <Select onValueChange={(value)=> setValue("type", value)}
+                            defaultValue={(watch("type"))}>
                           <SelectTrigger id="type">
                             <SelectValue placeholder="Select Type" />
                           </SelectTrigger>
@@ -59,6 +59,17 @@ const CreateAccountDrawer = ({children}) => {
                             <SelectItem value="SAVINGS">Savings</SelectItem>
                           </SelectContent>
                         </Select>
+                    </div>
+                    <div className='space-y-2'>
+                        <label htmlFor="number" className='text-sm font-medium'>Initial Balance</label>
+                        <Input id="balance" type="number" step="0.01" placeholder="0.00"
+                        {...register("balance")} />
+                        {errors.name && (
+                            <p className='text-sm text-red-700'>{errors.balance.message}</p>
+                        )}
+                    </div>
+                    <div className='space-y-2'>
+                        <label htmlFor="number" className='text-sm font-medium'>Set as </label>
                     </div>
                 </form>
             </div>
