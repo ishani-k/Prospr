@@ -1,12 +1,12 @@
 "use client";
 import React, { useState } from 'react'
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
-import { Button } from './ui/button';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchema } from '@/app/lib/schema';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Switch } from './ui/switch';
 
 const CreateAccountDrawer = ({children}) => {
 
@@ -69,7 +69,10 @@ const CreateAccountDrawer = ({children}) => {
                         )}
                     </div>
                     <div className='space-y-2'>
-                        <label htmlFor="number" className='text-sm font-medium'>Set as </label>
+                        <label htmlFor="number" className='text-sm font-medium'>Set as Default</label>
+                        <p>This account will be selected by default for transactions.</p>
+                        <Switch id="isDefault" onValueChange={(value)=> setValue("type", value)}
+                            defaultValue={watch("type")}/>
                     </div>
                 </form>
             </div>
