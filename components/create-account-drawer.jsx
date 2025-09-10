@@ -68,11 +68,17 @@ const CreateAccountDrawer = ({children}) => {
                             <p className='text-sm text-red-700'>{errors.balance.message}</p>
                         )}
                     </div>
-                    <div className='space-y-2'>
-                        <label htmlFor="number" className='text-sm font-medium'>Set as Default</label>
+
+                    <div className='flex items-center justify-between rounded-lg border p-3'>
+                        <div>
+                        <label htmlFor="number" className='text-sm font-medium'>
+                            Set as Default
+                            </label>
+
                         <p>This account will be selected by default for transactions.</p>
-                        <Switch id="isDefault" onValueChange={(value)=> setValue("type", value)}
-                            defaultValue={watch("type")}/>
+                        </div>
+                        <Switch id="isDefault" onCheckedChange={(checked)=> setValue("isDefault", checked)}
+                            checked={watch("isDefault")}/>
                     </div>
                 </form>
             </div>
