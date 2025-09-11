@@ -16,6 +16,8 @@ const serializeTransaction = (obj) => {
     {
         serialized.amount = obj.amount.toNumber()
     }
+
+    return serialized
 }
 
 export async function createAccount(data) {
@@ -105,7 +107,7 @@ export async function getUserAccounts() {
         },
     })
 
-    const serializeAccount = serializeTransaction(account);
+    const serializeAccount = accounts.map(serializeTransaction);
 
     return serializeAccount
 }
