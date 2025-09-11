@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from 'react'
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchema } from '@/app/lib/schema';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Switch } from './ui/switch';
+import { Button } from './ui/button';
 
 const CreateAccountDrawer = ({children}) => {
 
@@ -29,6 +30,17 @@ const CreateAccountDrawer = ({children}) => {
         }
     })
 
+
+    const onSubmit = async(data)=> {
+        console.log(data);
+        
+
+    }
+
+
+
+
+
   return (
     <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>{children}</DrawerTrigger>
@@ -38,7 +50,7 @@ const CreateAccountDrawer = ({children}) => {
             </DrawerHeader>
 
             <div className='px-4 pb-4'>
-                <form className='space-y-4'>
+                <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
                     <div className='space-y-2'>
                         <label htmlFor="name" className='text-sm font-medium'>Account Name</label>
                         <Input id="name" placeholder="e.g, Main Checking" 
@@ -70,15 +82,23 @@ const CreateAccountDrawer = ({children}) => {
                     </div>
 
                     <div className='flex items-center justify-between rounded-lg border p-3'>
-                        <div>
-                        <label htmlFor="number" className='text-sm font-medium'>
+                        <div className='space-y-0.5'>
+                        <label htmlFor="number" className='text-sm font-medium cursor-pointer'>
                             Set as Default
                             </label>
 
-                        <p>This account will be selected by default for transactions.</p>
+                        <p className='text-sm text-muted-foreground'>This account will be selected by default for transactions.</p>
                         </div>
                         <Switch id="isDefault" onCheckedChange={(checked)=> setValue("isDefault", checked)}
                             checked={watch("isDefault")}/>
+                    </div>
+
+                    <div className='flex gap-4 pt-4'>
+                        <DrawerClose asChild>
+                            <Button type='button' variant='outline' className='flex-1'>Cancel</Button>
+                        </DrawerClose>
+
+                        <Button type='submit' className='flex-1'>Create Account</Button>
                     </div>
                 </form>
             </div>
