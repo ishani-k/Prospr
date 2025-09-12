@@ -1,5 +1,7 @@
+import { updateDefaultAccount } from '@/actions/accounts'
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
+import useFetch from '@/hooks/useFetch'
 import { ArrowDownRight, ArrowUpRight} from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
@@ -8,13 +10,25 @@ const AccountCard = ({ account }) => {
 
   const { name, type, balance, id, isDefault} = account
 
+  const {
+    loading: updateDefaultLoading,
+    fn: updateDefaultFn,
+    data: updatedAccount,
+    error
+  } = useFetch(updateDefaultAccount)
+
+  const handleDefaultChange = async (e) => {
+    e.preventDefault()
+    
+  }
+
 
   return (
     <Card className='hover:shadow-md transition-shadow group relative'>
       <Link href={`/account/${id}`}>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-sm font-medium capitalize'>{name}</CardTitle>
-        <Switch checked={isDefault}/>
+        <Switch checked={isDefault} onClick={handleDefaultChange} disabled={updateDefaultLoading}/>
       </CardHeader>
       <CardContent>
        <div className='text-2xl font-bold pt-2'>
