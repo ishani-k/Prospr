@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { format } from 'date-fns/format';
 import { categoryColors } from '@/data/categories';
 import React from 'react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const TransactionTable = ({transactions}) => {
 
@@ -59,7 +60,14 @@ const TransactionTable = ({transactions}) => {
                             {transaction.type === "EXPENSE" ? "- " : "+ "}
                             ₹{transaction.amount.toFixed(2)} 
                         </TableCell>
-                        <TableCell>{}</TableCell>
+                        <TableCell>
+                            <Tooltip>
+                                <TooltipTrigger>Hover</TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Add to library</p>
+                                </TooltipContent>
+                                </Tooltip>
+                        </TableCell>
 
                         </TableRow>
                     ))
