@@ -1,10 +1,13 @@
+"use client";
+
 import { updateDefaultAccount } from '@/actions/accounts'
-import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import useFetch from '@/hooks/useFetch'
 import { ArrowDownRight, ArrowUpRight} from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { toast } from 'sonner'
 
 const AccountCard = ({ account }) => {
 
@@ -19,8 +22,31 @@ const AccountCard = ({ account }) => {
 
   const handleDefaultChange = async (e) => {
     e.preventDefault()
-    
+
+    if(isDefault)
+    {
+      toast.warning("You need atleast 1 default account.")
+      return  //Dont allow toggling off the default acc
+    }
+
+    await updateDefaultFn(id)
   }
+
+  useEffect(() => {
+    if(updatedAccount?.success)
+    {
+      toast.success("Default account updated successfully")
+    }
+  }, [updatedAccount, updateDefaultLoading])
+
+
+  useEffect(() => {
+    if(error)
+    {
+      toast.error(error.message || "Failed to update default account :(")
+    }
+  }, [error])
+  
 
 
   return (
