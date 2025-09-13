@@ -6,6 +6,8 @@ import { format } from 'date-fns/format';
 import { categoryColors } from '@/data/categories';
 import React from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Badge } from '@/components/ui/badge';
+import { Clock } from 'lucide-react';
 
 const TransactionTable = ({transactions}) => {
 
@@ -41,34 +43,37 @@ const TransactionTable = ({transactions}) => {
                 ) : (
                     filteredAndSortedTransactions.map((transaction) => (
                         <TableRow key={transaction.id}>
-                        <TableCell><Checkbox/></TableCell>
-                        <TableCell>{format(new Date(transaction.date), "PP")}</TableCell>
-                        <TableCell> {transaction.description}</TableCell>
-                        <TableCell className='capitalize'>
-                            <span 
+                            <TableCell><Checkbox/></TableCell>
+                            <TableCell>{format(new Date(transaction.date), "PP")}</TableCell>
+                            <TableCell> {transaction.description}</TableCell>
+                            <TableCell className='capitalize'>
+                                <span 
+                                style={{
+                                    background: categoryColors[transaction.category],
+                                }}
+                                className='px-2 py-1 rounded text-white text-sm'>
+                                {transaction.category}
+                                </span>
+                                </TableCell>
+                            <TableCell className="text-right font-medium"
                             style={{
-                                background: categoryColors[transaction.category],
-                            }}
-                            className='px-2 py-1 rounded text-white text-sm'>
-                            {transaction.category}
-                            </span>
+                                color: transaction.type === "EXPENSE" ? "red" : "green",
+                            }}>
+                                {transaction.type === "EXPENSE" ? "- " : "+ "}
+                                ₹{transaction.amount.toFixed(2)} 
                             </TableCell>
-                        <TableCell className="text-right font-medium"
-                        style={{
-                            color: transaction.type === "EXPENSE" ? "red" : "green",
-                        }}>
-                            {transaction.type === "EXPENSE" ? "- " : "+ "}
-                            ₹{transaction.amount.toFixed(2)} 
-                        </TableCell>
-                        <TableCell>
-                            <Tooltip>
-                                <TooltipTrigger>Hover</TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Add to library</p>
-                                </TooltipContent>
-                                </Tooltip>
-                        </TableCell>
-
+                            <TableCell>
+                                {transaction.isRecurring ? (
+                                <Tooltip>
+                                    <TooltipTrigger>Recurring</TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Add to library</p>
+                                    </TooltipContent>
+                                    </Tooltip>
+                                    ) : (
+                                        <Badge variant='outline' className='text-sm gap-1'><Clock className='h-3 w-3'/>One-Time</Badge>
+                                    )}
+                            </TableCell>
                         </TableRow>
                     ))
                 )}
