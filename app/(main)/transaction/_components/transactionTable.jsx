@@ -7,13 +7,23 @@ import { categoryColors } from '@/data/categories';
 import React from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import { Clock } from 'lucide-react';
+import {  Calendar1Icon, Clock } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+
+const RECURRING_INTERVALS = { 
+    DAILY: "Daily",
+    WEEKLY: "Weekly",
+    MONTHLY: "Monthly",
+    YEARLY: "Yearly"
+}
 
 const TransactionTable = ({transactions}) => {
 
     const filteredAndSortedTransactions = transactions
 
     const handleSort = () => {}
+
+
 
     return (
     <div className='space-y-4 '>
@@ -63,16 +73,34 @@ const TransactionTable = ({transactions}) => {
                                 ₹{transaction.amount.toFixed(2)} 
                             </TableCell>
                             <TableCell>
-                                {transaction.isRecurring ? (
-                                <Tooltip>
-                                    <TooltipTrigger>Recurring</TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Add to library</p>
-                                    </TooltipContent>
+                                {transaction.isRecurring? (
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Badge variant='outline' className='gap-1 bg-purple-100 text-purple-800 hover:bg-purple-200'><Calendar1Icon/>{RECURRING_INTERVALS[transaction.recurringInterval]}</Badge>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <div className='text-sm'>
+                                                <div className='font-medium'>Next Date:</div>
+                                                <div>{format(new Date(transaction.nextRecurringDate),"PP")}</div>
+                                            </div>
+                                        </TooltipContent>
                                     </Tooltip>
-                                    ) : (
-                                        <Badge variant='outline' className='text-sm gap-1'><Clock className='h-3 w-3'/>One-Time</Badge>
-                                    )}
+                                ):(
+                                    <Badge variant='outline' className='text-xs'><Clock/>One-time</Badge>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem>Profile</DropdownMenuItem>
+                                        <DropdownMenuItem>Billing</DropdownMenuItem>
+                                        <DropdownMenuItem>Team</DropdownMenuItem>
+                                        <DropdownMenuItem>Subscription</DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </TableCell>
                         </TableRow>
                     ))
