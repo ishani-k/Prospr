@@ -4,11 +4,13 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { format } from 'date-fns/format';
 import { categoryColors } from '@/data/categories';
-import React from 'react'
+import React, { useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import {  Calendar1Icon, Clock } from 'lucide-react';
+import {  Calendar1Icon, Clock, MoreHorizontalIcon, MoreVerticalIcon } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 const RECURRING_INTERVALS = { 
     DAILY: "Daily",
@@ -19,9 +21,21 @@ const RECURRING_INTERVALS = {
 
 const TransactionTable = ({transactions}) => {
 
+    const router = useRouter()
+    const [selectedIds, setSelectedIds] = useState([])
+    const [sortConfig, setSortConfig] = useState({
+        field: "date",
+        direction: "desc"
+    })
+
     const filteredAndSortedTransactions = transactions
 
-    const handleSort = () => {}
+    const handleSort = (field) => {
+        setSortConfig(current => ({
+            field,
+            direction: current.field == field && current.direction === "asc" ? "desc":"asc"
+        }))
+    }
 
 
 
@@ -89,16 +103,26 @@ const TransactionTable = ({transactions}) => {
                                     <Badge variant='outline' className='text-xs'><Clock/>One-time</Badge>
                                 )}
                             </TableCell>
+
                             <TableCell>
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className='h-8 w-8 p-0'>
+                                            <MoreVerticalIcon className='h-4 w-4'/>
+                                        </Button>
+                                    </DropdownMenuTrigger>
                                     <DropdownMenuContent>
-                                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                        <DropdownMenuItem 
+                                        onClick = {()=> 
+                                            router.push(
+                                                `/transaction/create?edit=${transaction.id}`
+                                            )
+                                        } >
+                                        Edit</DropdownMenuItem>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem>Profile</DropdownMenuItem>
-                                        <DropdownMenuItem>Billing</DropdownMenuItem>
-                                        <DropdownMenuItem>Team</DropdownMenuItem>
-                                        <DropdownMenuItem>Subscription</DropdownMenuItem>
+                                        <DropdownMenuItem className='text-destructive'
+                                        // onClick={()=>deleteFn([transaction.id])}
+                                        >Delete</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </TableCell>
