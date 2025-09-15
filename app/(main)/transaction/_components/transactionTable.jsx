@@ -7,7 +7,7 @@ import { categoryColors } from '@/data/categories';
 import React, { useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import {  Calendar1Icon, Clock, MoreHorizontalIcon, MoreVerticalIcon } from 'lucide-react';
+import {  Calendar1Icon, ChevronDown, ChevronUp, Clock, MoreHorizontalIcon, MoreVerticalIcon } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -37,6 +37,14 @@ const TransactionTable = ({transactions}) => {
         }))
     }
 
+    const handleSelect = () => {
+        
+    }
+
+    const handleSelectAll = () => {
+
+    }
+
 
 
     return (
@@ -49,10 +57,34 @@ const TransactionTable = ({transactions}) => {
             <TableHeader>
                 <TableRow>
                 <TableHead className="w-[50px]"><Checkbox/></TableHead>
-                <TableHead className="cursor-pointer" onClick={()=> handleSort("date")}><div className="flex items-center">Date</div></TableHead>
+
+                <TableHead className="cursor-pointer" onClick={()=> handleSort("date")}><div className="flex items-center">
+                    Date{" "}
+                    {sortConfig.field === "date" && 
+                    (sortConfig.direction === "asc" ? (
+                        <ChevronUp className='ml-1 h-4 w-4'/>
+                    ) : (
+                        <ChevronDown className="ml-1 h-4 w-4"/>
+                    ))}
+                    </div></TableHead>
                 <TableHead className="cursor-pointer" onClick={()=> handleSort("description")}><div className="flex items-center">Description</div></TableHead>
-                <TableHead className="cursor-pointer" onClick={()=> handleSort("category")}><div className="flex items-center">Category</div></TableHead>
-                <TableHead className="cursor-pointer" onClick={()=> handleSort("amount")}><div className="flex items-center justify-end">Amount</div></TableHead> 
+                <TableHead className="cursor-pointer" onClick={()=> handleSort("category")}><div className="flex items-center">
+                    Category
+                    {sortConfig.field === "category" && 
+                    (sortConfig.direction === "asc" ? (
+                        <ChevronUp className='ml-1 h-4 w-4'/>
+                    ) : (
+                        <ChevronDown className="ml-1 h-4 w-4"/>
+                    ))}</div></TableHead>
+                <TableHead className="cursor-pointer" onClick={()=> handleSort("amount")}><div className="flex items-center justify-end">
+                    Amount
+                    {sortConfig.field === "amount" && 
+                    (sortConfig.direction === "asc" ? (
+                        <ChevronUp className='ml-1 h-4 w-4'/>
+                    ) : (
+                        <ChevronDown className="ml-1 h-4 w-4"/>
+                    ))}
+                    </div></TableHead> 
                 <TableHead className="cursor-pointer">Recurring</TableHead> 
                 <TableHead/>
                 </TableRow>
