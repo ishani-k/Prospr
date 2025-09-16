@@ -4,7 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { format } from 'date-fns/format';
 import { categoryColors } from '@/data/categories';
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import {  Calendar1Icon, ChevronDown, ChevronUp, Clock, MoreVerticalIcon, Search, Trash2, X } from 'lucide-react';
@@ -35,7 +35,57 @@ const TransactionTable = ({transactions}) => {
     const [recurringFilter, setRecurringFilter] = useState("")
 
 
-    const filteredAndSortedTransactions = transactions
+    const filteredAndSortedTransactions = useMemo(() => {
+        let result = [...transactions]
+
+        //applying srch filter
+        if(searchTerm) {
+            const searchLower = searchTerm.toLowerCase()
+            result = result.filter((transaction) =>
+                transaction.description?.toLowerCase().includes(searchLower)
+            )
+        }
+
+        //applying reccuring filter
+        if(recurringFilter) {
+            result = result.filter((transaction) => {
+                if(recurringFilter === "recurring") return transaction.isRecurring
+                return !transaction.isRecurring
+            })
+        }
+
+        //applying type filter
+        if(typeFilter)
+        {
+            result = result.filter((transaction) => transaction.type === typeFilter)
+        }
+
+        //applying sorting
+        result.sort((a,b) => {
+             
+            let comparison = 0
+
+            switch (sortConfig.field) {
+                case "date":
+                    comparison = new Date(a.date) - new Date(b.date)
+                    break;
+                case "amount":
+                    comparison = a.amount - b.amount
+                    break;
+                case "category":
+                    comparison = a.category.localeCompare(b.category)
+                    break;
+            
+                default:
+                    comparison = 0
+            }
+
+            return sortConfig.direction === "asc" ? comparison : -comparison
+        })
+
+
+        return result
+    }, [ transactions, searchTerm, typeFilter, recurringFilter, sortConfig])
 
     const handleSort = (field) => {
         setSortConfig(current => ({
@@ -62,7 +112,12 @@ const TransactionTable = ({transactions}) => {
 
     const handleBulkDelete = () => {}
 
-    const handleClearFilter = () => {}
+    const handleClearFilter = () => {
+        setSearchTerm("")
+        setTypeFilter("")
+        setRecurringFilter("")
+        setSelectedIds([])
+    }
 
 
 
@@ -109,7 +164,7 @@ const TransactionTable = ({transactions}) => {
 
                 {(searchTerm || typeFilter || recurringFilter ) && (
                     <Button variant='outline' size='icon' onClick={handleClearFilter}>
-                        <X/>
+                        <X className='h-4 w-5'/>
                     </Button>
                 )}
             
@@ -137,7 +192,9 @@ const TransactionTable = ({transactions}) => {
                         <ChevronDown className="ml-1 h-4 w-4"/>
                     ))}
                     </div></TableHead>
+
                 <TableHead className="cursor-pointer" onClick={()=> handleSort("description")}><div className="flex items-center">Description</div></TableHead>
+
                 <TableHead className="cursor-pointer" onClick={()=> handleSort("category")}><div className="flex items-center">
                     Category
                     {sortConfig.field === "category" && 
