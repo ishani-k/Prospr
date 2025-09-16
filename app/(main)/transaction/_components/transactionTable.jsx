@@ -7,8 +7,8 @@ import { categoryColors } from '@/data/categories';
 import React, { useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import {  Calendar1Icon, ChevronDown, ChevronUp, Clock, MoreHorizontalIcon, MoreVerticalIcon, Search } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {  Calendar1Icon, ChevronDown, ChevronUp, Clock, MoreVerticalIcon, Search, Trash2, X } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
@@ -62,6 +62,8 @@ const TransactionTable = ({transactions}) => {
 
     const handleBulkDelete = () => {}
 
+    const handleClearFilter = () => {}
+
 
 
     return (
@@ -98,12 +100,19 @@ const TransactionTable = ({transactions}) => {
                     </SelectContent>
                 </Select>
 
-                {selectedIds.length > 0 &&
-                <div>
+                {selectedIds.length > 0 && (
+                <div className='flex items-center gap-2'>
                     <Button variant='destructive' size='sm' onClick={handleBulkDelete}>
-                        Delete Selected({selectedIds.length})
+                        <Trash2 className='h-4 w-4 mr-2' />Delete Selected({selectedIds.length})
                     </Button>
-                </div>}
+                </div> )}
+
+                {(searchTerm || typeFilter || recurringFilter ) && (
+                    <Button variant='outline' size='icon' onClick={handleClearFilter}>
+                        <X/>
+                    </Button>
+                )}
+            
             </div>
         </div>
 
