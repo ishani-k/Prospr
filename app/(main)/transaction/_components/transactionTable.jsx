@@ -48,15 +48,18 @@ const TransactionTable = ({transactions}) => {
             return
         }
 
-        deleteFn(selectedIds)
+        await deleteFn(selectedIds)
     }
 
     useEffect(() => {
         if(deleted && !deleteLoading)
         {
-            toast.error("Transactions deleted successfully ^_^")
+            toast.success("Transactions deleted successfully ^_^")
+            setSelectedIds([])
+            
+            router.refresh()
         }
-    }, [deleted, deleteLoading])
+    }, [deleted, deleteLoading, router])
 
     
 

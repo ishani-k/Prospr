@@ -124,13 +124,29 @@ export async function bulkDeleteTransactions(transactionIds) {
             }
         })
 
-        const accountBalanceChanges = transactions.reduce((acc, transaction) => {
+        /* const accountBalanceChanges = transactions.reduce((acc, transaction) => {
             const change = 
                 transaction.type === "EXPENSE"
                 ? transaction.amount : -transaction.amount
 
                 acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change
-        },{})
+                return acc
+        },{}) */
+
+
+
+                const accountBalanceChanges = transactions.reduce((acc, transaction) => {
+        const amount = typeof transaction.amount?.toNumber === "function"
+            ? transaction.amount.toNumber()
+            : Number(transaction.amount || 0);
+
+        const change = transaction.type === "EXPENSE" 
+            ? amount 
+            : -amount;
+
+            acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change;
+            return acc;
+        }, {});
 
         //delete the transaction and update the acc bal in trsc
 
