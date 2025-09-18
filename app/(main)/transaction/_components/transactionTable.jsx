@@ -206,6 +206,7 @@ const TransactionTable = ({transactions}) => {
             </div>
         </div>
 
+
         {/* Transactions UI */}
         <div className='rounded-md border'>
         <Table>
