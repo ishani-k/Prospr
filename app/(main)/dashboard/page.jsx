@@ -20,7 +20,7 @@ async function DashboardPage() {
   }
 
   return (
-    <div className='px-5'>
+    <div className='px-5 space-y-5'>
       {/*Budget Progress */}
       {defaultAccount && <BudgetProgress
       initialBudget = {budgetData?.budget}

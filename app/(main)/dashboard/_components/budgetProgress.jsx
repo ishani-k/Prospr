@@ -103,11 +103,10 @@ const BudgetProgress = ({initialBudget, currentExpenses}) => {
                 <Progress value={percentageUsed} 
                 extraStyles={`${
                     percentageUsed >= 90
-                    ? "bg-red-700"
-                    : percentageUsed >= 75
-                    ? "bg-yellow-500"
-                    : percentageUsed < 75
-                    ? "bg-green-400" : "bg-blue-100"
+                ? "bg-red-700"
+                : percentageUsed >= 75
+                ? "bg-yellow-500"
+                : "bg-green-400"
                 }`}
             />
             <p className='text-xs text-muted-foreground text-right'>
