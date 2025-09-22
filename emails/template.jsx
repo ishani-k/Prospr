@@ -1,7 +1,7 @@
-import { Body, Button, Container, Head, Heading, Html, Preview, Text } from "@react-email/components";
+import { Body, Container, Head, Heading, Html, Preview, Section, Text } from "@react-email/components";
 import * as React from "react";
 
-export default function Email({
+export default function EmailTemplate({
     userName= "",
     type= "budget-alert",
     data= {},
@@ -19,6 +19,32 @@ export default function Email({
             <Container style={styles.container}>
                 <Heading style={styles.title}>Budget Alert</Heading>
                 <Text style={styles.text}>Hello {userName},</Text>
+                <Text style={styles.text}>
+                    We wanted to let you know that you've used &nbsp;
+                     <span style={styles.span}>{(data?.percentageUsed ?? 0).toFixed(1)}%</span> &nbsp;
+                     of your monthly budget.
+                    This is just a gentle reminder to help you keep track of your expenses.
+                    <br /> <br />
+                    If you’re already aware of this, please feel free to ignore this message.
+                </Text>
+                <Section style={styles.statContainer}>
+                    <div style={styles.stat}>
+                        <Text style={styles.text}>Budget Amount</Text>
+                        <Text style={styles.heading}>₹{data?.budgetAmount}</Text>
+                    </div>
+                    <div style={styles.stat}>
+                        <Text style={styles.text}>Amount Spent</Text>
+                        <Text style={styles.heading}>₹{data?.totalExpenses}</Text>
+                    </div>
+                    <div style={styles.stat}>
+                        <Text style={styles.text}>Amount Remaining</Text>
+                        <Text style={styles.heading}>₹{data?.budgetAmount - data?.totalExpenses}</Text>
+                    </div>
+                </Section>
+                <Text style={styles.text}>
+                    Best regards, <br />
+                    Prospr Team
+                </Text>
             </Container>
         </Body>
         </Html>
@@ -31,6 +57,56 @@ export default function Email({
 const styles = {
     body: {
         backgroundColor: "#f6f9fc",
-        fontFamilu: "-apple-system, sans-serif"
+        fontFamily: "Georgia, serif"
+    },
+
+    container: {
+        backgroundColor: "#ffffff",
+        margin: "0 auto",
+        padding: "20px",
+        borderRadius: "5px",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    },
+    
+    title: {
+        color: "#1f2937",
+        fontSize: "32px",
+        fontWeight: "bold",
+        textAlign: "center",
+        margin: "0 0 20px"
+    },
+
+    heading: {
+        color: "#1f2937",
+        fontSize: "20px",
+        fontWeight: "600",
+        margin: "0 0 16px"
+    },
+
+    text: {
+        color: "#4b5563",
+        fontSize: "16px",
+        margin: "0 0 16px"
+    },
+
+    statContainer: {
+        margin: "32px 0",
+        padding: "20px",
+        backgroundColor: "f9fafb",
+        borderRadius: "5px"
+    },
+
+    stat: {
+        marginBottom: "16px",
+        padding: "12px",
+        backgroundColor: "#fff",
+        borderRadius: "4px",
+        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
+    },
+
+    span: {
+        fontWeight: "600",
+        color: "#000000",
+        fontSize: "17px"
     }
 }
