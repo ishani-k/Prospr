@@ -4,10 +4,18 @@ import { db } from "@/lib/prisma"
 import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
 
-const serializeAmount = (obj) => ({
-    ...obj,
-    amount:obj.toNumber()
+// const serializeAmount = (obj) => ({
+//     ...obj,
+//     amount:obj.toNumber()
+// })
+
+const serializeAmount = (transaction) => ({
+  ...transaction,
+  amount: typeof transaction.amount?.toNumber === "function"
+    ? transaction.amount.toNumber()
+    : Number(transaction.amount),
 })
+
 
 
 export async function createTransaction(data) {

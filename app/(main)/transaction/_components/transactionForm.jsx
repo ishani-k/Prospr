@@ -79,7 +79,7 @@ const AddTransactionForm = ({accounts, categories}) => {
     <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
       {/*AI Receipt Scanner */}
 
-      <div>
+      
       {/*Type(inc/exp) */}
       <div className='space-y-2'>
         <label className='text-sm font-medium'>Type</label>
@@ -111,7 +111,7 @@ const AddTransactionForm = ({accounts, categories}) => {
         </div>
 
         {/*Account */}
-        <div>
+        <div className='space-y-2'>
           <label className='text-sm font-medium'>Account</label>
           <Select onValueChange = {(value) => setValue("accountId", value)}
             defaultValue={ getValues('accountId') }>
@@ -237,11 +237,11 @@ const AddTransactionForm = ({accounts, categories}) => {
       </div>
       )}
 
-      <div className='flex gap-4'>
-          <Button type="submit" className='w-full'  disabled={transactionLoading}>Create Transaction</Button>
-          <Button type="button" className='w-full' variant='outline' onClick={() => router.back()}>Cancel</Button>
+      <div className='flex gap-4 pb-1'>
+          <Button type="submit" className='flex-1'  disabled={transactionLoading}>Create Transaction</Button>
+          <Button type="button" className='flex-1' variant='outline' onClick={() => router.back()}>Cancel</Button>
       </div>
-     </div>
+     
     </form>
   )
 }
