@@ -68,6 +68,10 @@ const AddTransactionForm = ({accounts, categories}) => {
       reset()
       router.push(`/account/${transactionResult.data.accountId}`)
     }
+    else if (transactionResult?.error) 
+    {
+      toast.error(transactionResult.error)   
+    }
   }, [transactionResult, transactionLoading])
   
 
