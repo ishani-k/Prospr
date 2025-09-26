@@ -167,8 +167,8 @@ export async function scanReceipt(file) {
                     data: base64String,
                     mimeType: file.type
                 },
-                prompt
-            }
+            },
+            prompt
         ])
 
         const response = await result.response
@@ -186,12 +186,11 @@ export async function scanReceipt(file) {
             }
         } catch (error) {
             console.error("Error parsing JSON response:", parseError)
-            
+            throw new Error("Invalid response format from Gemini")
         }
-
-
-
     } catch (error) {
+        console.error("Error scanning receipt:", error.message)
+        throw new Error("Failed to scan receipt")
         
     }
 }
