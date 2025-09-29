@@ -89,3 +89,71 @@ function isNewMonth(lastAlertSent, currentDate) {
     lastAlertSent.getFullYear() !== currentDate.getFullYear()
   )
 }
+
+export const triggerRecurringTransactions = inngest.createFunction(
+  {
+    id: "trigger-recurring-transactions",
+    name: "Trigger Recurring Transactions"
+  },
+  {
+    cron: "0 0 * * *"
+  },
+  async ({ step }) => {
+    // fetching all due recurring transctns
+    const recurringTransactions = await step.run(
+      "fetch-recurring-transactions",
+      async () => {
+        return await db.transaction.findMany({
+          where: {
+            isRecurring: true,
+            status: "COMPLETED",
+            OR: [
+              { lastProcessed: null }, //Never processed
+              { nextRecurringDate: { lte: new Date() }} //due date passed
+            ]
+          }
+        })
+      }
+    )
+
+    // create events for each transctns
+    if(recurringTransactions.length > 0)
+    {
+      const events = recurringTransactions.map((transaction) => ({
+        name: "transaction.recurring.process",
+        data: { transactionId: transaction.id, userId: transaction.userId }
+      }))
+
+      //send events to be processed
+      await inngest.send(events)
+    }
+
+    return { triggered: recurringTransactions.length }
+  }
+)
+
+
+export const processRecurringTransactions = inngest.createFunction(
+  {
+    id: "process-recurring-transaction",
+    throttle: {
+      limit: 10, //only 10 transactions
+      period: "1m", //per min
+      key: "event.data.userId", //per user
+    }
+  },
+  {
+      event: "transaction.recurring.process"
+  },
+
+  async ({ event, step }) => {
+    //validate event data 
+    if(!event?.data?.transactionId || !event?.data?.userId)
+    {
+      console.error("Invalid event data:", event)
+      return { error: "Missing required event data"}
+    }
+
+    await step.run("process-transaction", asy)
+  }
+)
