@@ -1,10 +1,10 @@
 import { inngest } from "@/app/lib/inngest/client";
-import { checkBudgetAlert } from "@/app/lib/inngest/functions";
+import { checkBudgetAlert, processRecurringTransactions, triggerRecurringTransactions } from "@/app/lib/inngest/functions";
 import { serve } from "inngest/next";
 
 
 // Create an API that serves zero functions
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [checkBudgetAlert],
+  functions: [checkBudgetAlert, triggerRecurringTransactions, processRecurringTransactions],
 });

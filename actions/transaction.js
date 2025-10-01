@@ -194,3 +194,102 @@ export async function scanReceipt(file) {
         
     }
 }
+
+
+//editing transaction, fetching the one to be edited
+export async function getTransactionn(id) {
+    
+    const { userId } = await auth()
+    if(!userId) throw new Error("Unauthorized")
+
+    const user = await db.user.findUnique({
+        where: { clerkUserId: userId }
+    })
+
+    if(!user) throw new Error("User not found")
+
+    const transaction = await db.transaction.findUnique({
+        where: {
+            id,
+            userId: user.id
+        }
+    })
+
+    if(!transaction) throw new Error("Transaction not found")
+
+    return serializeAmount(transaction)
+}
+
+
+//update trnsctn
+export async function updateTransaction(id, data) {
+    try {
+        const { userId } = await auth()
+        if(!userId) throw new Error("Unauthorized")
+
+        const user = await db.user.findUnique({
+            where: { clerkUserId: userId }
+        })
+
+        if(!user) throw new Error("User not found")
+
+        //get org transc to calc bal change
+        const originalTransaction = await db.transaction.findUnique({
+            where: {
+                id,
+                userId: user.id
+            },
+            include: {
+                account: true
+            }
+        })
+
+        if(!transaction) throw new Error("Transaction not found")
+
+        //calc bal changes
+        const oldBalanceChange = 
+            originalTransaction.type === "EXPENSE" ?
+            -originalTransaction.amount.toNumber() : originalTransaction.amount.toNumber()
+
+        const newBalanceChange = 
+            data.type === "EXPENSE" ?
+            -data.amount : data.amount
+
+        const netBalanceChange = newBalanceChange - oldBalanceChange
+
+        //upd transctn and acc bal in a transc
+        const transaction = await db.$transaction(async (tx) => {
+            const updated = await tx.transaction.update({
+                where: {
+                    id,
+                    userId: user.id
+                },
+                data: {
+                    ...data,
+                    nextRecurringDate: 
+                        data.isRecurring&& data.recurringInterval ?
+                        calculateNextRecurringDate(data.date, data.recurringInterval) : NULL
+                }
+            })
+
+            //upd acc bal
+            await tx.account.update({
+                where: { id: data.accountId },
+                data: {
+                    balance: {
+                        increment: netBalanceChange
+                    }
+                }
+            })
+
+            return updated
+        })
+
+        revalidatePath("/dashboard")
+        revalidatePath(`/account/${data.accountId}`)
+
+        return { success: true, data: serializeAmount(transaction) }
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}

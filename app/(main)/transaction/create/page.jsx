@@ -3,9 +3,18 @@ import { defaultCategories } from '@/data/categories'
 import React from 'react'
 import AddTransactionForm from '../_components/transactionForm'
 
-const addTransactionPage = async () => {
+const addTransactionPage = async ({ searchParams }) => {
 
   const accounts = await getUserAccounts()
+
+  const editId = searchParams?.edit
+
+  let initialData = null
+  if(editId)
+  {
+    
+  }
+  
 
   return (
     <div className='max-w-3xl mx-auto px-5'>
