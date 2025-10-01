@@ -156,6 +156,89 @@ export const processRecurringTransactions = inngest.createFunction(
       return { error: "Missing required event data"}
     }
 
-    await step.run("process-transaction", asy)
+    await step.run("process-transaction", async () => {
+      const transaction = await db.transaction.findUnique({
+        where: {
+          id: event.data.transactionId,
+          userId: event.data.userId
+        },
+        include: {
+          account: true
+        }
+      })
+
+      if(!transaction || !isTransactionDue(transaction)) return
+
+      await db.$transaction(async (tx) => {
+        //create new transactn
+        await tx.transaction.create({
+          data: {
+            type: transaction.type,
+            amount: transaction.amount,
+            description: `${transaction.description} (Recurring)`,
+            date: new Date(),
+            category: transaction.category,
+            userId: transaction.userId,
+            accountId: transaction.accountId,
+            isRecurring: false
+          }
+        })
+
+        //update account balance
+        const balanceChange = 
+        transaction.type === "EXPENSE"
+          ? -transaction.amount.toNumber()
+          : transaction.amount.toNumber()
+
+        await tx.account.update({
+          where: { id: transaction.accountId },
+          data: { balance: { increment: balanceChange } }
+        })
+
+        //update last processed date and next recurring date
+        await tx.transaction.update({
+          where: { id: transaction.id },
+          data: {
+            lastProcessed: new Date(),
+            nextRecurringDate: calculateNextRecurringDate(
+              new Date(),
+              transaction.recurringInterval
+            )
+          }
+        })
+      })
+    })
   }
 )
+
+function isTransactionDue(transaction) {
+  //if not last processed date, transactn is due
+  if(!transaction.lastProcessed) return true
+
+  const today = new Date()
+  const nextDue = new Date(transaction.nextRecurringDate)
+
+  //compare w next due date
+  return nextDue <= today
+}
+
+function calculateNextRecurringDate(startDate, interval) {
+    const date = new Date(startDate)
+
+    switch (interval) {
+        case "DAILY":
+            date.setDate(date.getDate() + 1)
+            break;
+        case "WEEKLY":
+            date.setDate(date.getDate() + 7)
+            break;
+        case "MONTHLY":
+            date.setMonth(date.getMonth() + 1)
+            break;
+        case "YEARLY":
+            date.setFullYear(date.getFullYear() + 1)
+            break;
+    }
+    return date
+    
+}
