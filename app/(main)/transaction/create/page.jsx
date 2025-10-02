@@ -2,6 +2,7 @@ import { getUserAccounts } from '@/actions/dashboard'
 import { defaultCategories } from '@/data/categories'
 import React from 'react'
 import AddTransactionForm from '../_components/transactionForm'
+import { getTransaction } from '@/actions/transaction'
 
 const addTransactionPage = async ({ searchParams }) => {
 
@@ -12,7 +13,8 @@ const addTransactionPage = async ({ searchParams }) => {
   let initialData = null
   if(editId)
   {
-    
+     const transaction = await getTransaction(editId)
+     initialData = transaction
   }
   
 
@@ -23,6 +25,8 @@ const addTransactionPage = async ({ searchParams }) => {
       <AddTransactionForm
       accounts = {accounts}
       categories = {defaultCategories}
+      editMode = {!!editId}
+      initialData = {initialData}
       />
     </div>
   )

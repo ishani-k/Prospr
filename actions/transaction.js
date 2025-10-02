@@ -197,7 +197,7 @@ export async function scanReceipt(file) {
 
 
 //editing transaction, fetching the one to be edited
-export async function getTransactionn(id) {
+export async function getTransaction(id) {
     
     const { userId } = await auth()
     if(!userId) throw new Error("Unauthorized")

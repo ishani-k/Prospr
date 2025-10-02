@@ -1,6 +1,6 @@
 "use client"
 
-import { createTransaction } from '@/actions/transaction'
+import { createTransaction, updateTransaction } from '@/actions/transaction'
 import { transactionSchema } from '@/app/lib/schema'
 import CreateAccountDrawer from '@/components/create-account-drawer'
 import { Button } from '@/components/ui/button'
@@ -13,15 +13,17 @@ import useFetch from '@/hooks/useFetch'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns/format'
 import { CalendarIcon} from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import ReceiptScanner from './receiptScanner'
 
-const AddTransactionForm = ({accounts, categories}) => {
+const AddTransactionForm = ({accounts, categories, editMode = false, initialData = null}) => {
 
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const editId = searchParams.get("edit")
 
   const {
     register,
@@ -33,21 +35,34 @@ const AddTransactionForm = ({accounts, categories}) => {
     reset
   } = useForm({
       resolver: zodResolver(transactionSchema),
-      defaultValues: {
-        type: "EXPENSE",
-        amount: "",
-        description: "",
-        accountId: accounts.find((ac) => ac.isDefault)?.id,
-        date: new Date(),
-        isRecurring: false
-      }
+      defaultValues:
+        editMode && initialData ?
+        {
+          type: initialData.type,
+          amount: initialData.amount.toString(),
+          description: initialData.description,
+          accountId: initialData.accountId,
+          category: initialData.category,
+          date: new Date(initialData.date),
+          isRecurring: initialData.isRecurring,
+          ...(initialData.recurringInterval && {
+            recurringInterval: initialData.recurringInterval
+          })
+        } : {
+          type: "EXPENSE",
+          amount: "",
+          description: "",
+          accountId: accounts.find((ac) => ac.isDefault)?.id,
+          date: new Date(),
+          isRecurring: false
+        }
     })
 
   const {
     loading: transactionLoading,
     fn: transactionFn,
     data: transactionResult
-  } = useFetch(createTransaction)
+  } = useFetch(editMode ? updateTransaction : createTransaction)
 
   const type = watch("type")
   const isRecurring = watch("isRecurring")
