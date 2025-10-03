@@ -95,6 +95,8 @@ const AddTransactionForm = ({accounts, categories, editMode = false, initialData
     (category) => category.type === type
   )
 
+  //
+
   const handleScanComplete = (scannedData) => {
     if(scannedData){
       setValue("amount", scannedData.amount.toString())
