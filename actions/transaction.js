@@ -244,7 +244,7 @@ export async function updateTransaction(id, data) {
             }
         })
 
-        if(!transaction) throw new Error("Transaction not found")
+        if(!originalTransaction) throw new Error("Transaction not found")
 
         //calc bal changes
         const oldBalanceChange = 
@@ -268,7 +268,7 @@ export async function updateTransaction(id, data) {
                     ...data,
                     nextRecurringDate: 
                         data.isRecurring&& data.recurringInterval ?
-                        calculateNextRecurringDate(data.date, data.recurringInterval) : NULL
+                        calculateNextRecurringDate(data.date, data.recurringInterval) : null
                 }
             })
 

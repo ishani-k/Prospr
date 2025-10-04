@@ -12,7 +12,7 @@ import { Switch } from '@/components/ui/switch'
 import useFetch from '@/hooks/useFetch'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns/format'
-import { CalendarIcon} from 'lucide-react'
+import { CalendarIcon, Loader2} from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -74,13 +74,21 @@ const AddTransactionForm = ({accounts, categories, editMode = false, initialData
       amount: parseFloat(data.amount)
     }
 
-    transactionFn(formData)
+    if(editMode)
+    {
+      transactionFn(editId, formData)
+    }
+    else
+    {
+      transactionFn(formData)
+    }
   }
 
   useEffect(() => {
     if(transactionResult?.success && !transactionLoading)
     {
-      toast.success("Transaction created successfully !!")
+      toast.success(editMode ?
+        "Transaction updated successfully !!" : "Transaction created successfully !!")
       reset()
       router.push(`/account/${transactionResult.data.accountId}`)
     }
@@ -88,7 +96,7 @@ const AddTransactionForm = ({accounts, categories, editMode = false, initialData
     {
       toast.error(transactionResult.error)   
     }
-  }, [transactionResult, transactionLoading])
+  }, [transactionResult, transactionLoading, editMode])
   
 
   const filteredCategories = categories.filter(
@@ -116,7 +124,7 @@ const AddTransactionForm = ({accounts, categories, editMode = false, initialData
     <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
 
       {/*AI Receipt Scanner */}
-      <ReceiptScanner onScanComplete={handleScanComplete} />
+      {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />}
 
 
 
@@ -279,7 +287,19 @@ const AddTransactionForm = ({accounts, categories, editMode = false, initialData
       )}
 
       <div className='flex gap-4 pb-1'>
-          <Button type="submit" className='flex-1'  disabled={transactionLoading}>Create Transaction</Button>
+          <Button type="submit" className='flex-1'  disabled={transactionLoading}>
+            {transactionLoading ? (
+              <>
+                {" "}
+                <Loader2 className='mr-2 h-4 w-4 animate-spin'/>
+                {editMode ? "Updating..." : "Creating..."}
+              </>
+            ) : editMode ? (
+              "Update Transaction"
+            ) : (
+              "Create Transaction"
+            )}
+            </Button>
           <Button type="button" className='flex-1' variant='outline' onClick={() => router.back()}>Cancel</Button>
       </div>
      
