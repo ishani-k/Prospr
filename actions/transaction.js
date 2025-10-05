@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { revalidatePath } from "next/cache"
 
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 // const serializeAmount = (obj) => ({
@@ -133,7 +134,6 @@ function calculateNextRecurringDate(startDate, interval) {
 
 
 //AI receipt scanner
-
 export async function scanReceipt(file) {
     try {
         const model = genAI.getGenerativeModel({model: "gemini-2.5-flash"})
