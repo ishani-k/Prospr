@@ -133,9 +133,9 @@ const DashboardOverview = ({ accounts, transactions }) => {
                                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
                                 >
                                     {
-                                    pieChartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]}/>
-                                    ))
+                                        pieChartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={colors[index % colors.length]}/>
+                                        ))
                                     }
                                 </Pie>
                                 <Tooltip
