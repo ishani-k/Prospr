@@ -299,14 +299,14 @@ async function generateFinancialInsights(stats, month) {
 
   const prompt = `Analyze this financial data and provide 3 concise, actionable insights.
     Focus on spending patterns and practical advice.
-    Keep it friendly and conversational.
+    Keep it friendly and conversational. Write the amounts in INR (₹)
 
     Financial Data for ${month}:
     - Total Income: ₹${stats.totalIncome}
     - Total Expenses: ₹${stats.totalExpenses}
-    - Net Income: ₹${stats.totalIncome - stats.totalExpenses}
+    - Net Income: ₹${(stats.totalIncome - stats.totalExpenses).toFixed(2)}
     - Expense Categories: ${Object.entries(stats.byCategory)
-      .map(([category, amount]) => `${category}: ₹${amount}`)
+      .map(([category, amount]) => `${category}:  ₹${amount}`)
       .join(", ")}
 
     Format the response as a JSON array of strings, like this:
