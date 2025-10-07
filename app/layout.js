@@ -12,7 +12,7 @@ export const metadata = {
   title: "Prospr",
   description: "Track every spend. Grow every rupee.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.png",
   },
 };
 
