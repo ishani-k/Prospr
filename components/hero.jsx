@@ -35,8 +35,16 @@ const HeroSection = () => {
   }, [])
 
   return (
-    <div className="pb-20 px-4">
-      <div className="container mx-auto text-center">
+    <div className="pb-15 px-4 -mt-4">
+      {/*<div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-50 ">
+        <img src="/Group 1707482950.png" alt="" />
+      </div>*/}
+      {/*<div
+        className="absolute inset-0 bg-fixed bg-no-repeat opacity-50 -z-10"
+        style={{ backgroundImage: "url('/Group 1707482950.png')" }}
+      ></div>*/}      
+
+      <div className="relative z-10 container mx-auto text-center ">
         <h1 className="text-5xl md:text-8xl lg:text-[70px] tracking-tighter pb-6 bg-gradient-to-br from-[#bbd2cf] via-[#536976] to-[#292e49] text-transparent bg-clip-text">
           Money made simple. <br />
           Insights made smart.
@@ -61,7 +69,7 @@ const HeroSection = () => {
         <div className="hero-image-wrapper">
           <div ref={imageRef} className="hero-image">
             <Image src="/hero-banner.png"
-            width={1280}
+            width={1000}
             height={720}
             alt="dashboard preview"
             className="rounded-lg shadow-2xl border mx-auto"

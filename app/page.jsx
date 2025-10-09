@@ -7,7 +7,9 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mt-30">
+    
+    <div className="mt-32">
+        
       <HeroSection/>
 
       <section className="py-20 bg-blue-50">
@@ -91,6 +93,8 @@ export default function Home() {
         </div>
       </section>
     </div>
+    
+    
 
   );
 }
