@@ -39,10 +39,10 @@ const HeroSection = () => {
       {/*<div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-50 ">
         <img src="/Group 1707482950.png" alt="" />
       </div>*/}
-      {/*<div
-        className="absolute inset-0 bg-fixed bg-no-repeat opacity-50 -z-10"
+      <div
+        className="absolute inset-0 bg-no-repeat opacity-50 -z-10"
         style={{ backgroundImage: "url('/Group 1707482950.png')" }}
-      ></div>*/}      
+      ></div>    
 
       <div className="relative z-10 container mx-auto text-center ">
         <h1 className="text-5xl md:text-8xl lg:text-[70px] tracking-tighter pb-6 bg-gradient-to-br from-[#bbd2cf] via-[#536976] to-[#292e49] text-transparent bg-clip-text">
