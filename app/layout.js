@@ -28,9 +28,9 @@ export default function RootLayout({ children }) {
         </main>        
         <Toaster richColors/>
         {/* footer */}
-        <footer className="bg-blue-50 py-12">
-          <div className="container mx-auto px-4 text-center text-gray-500">
-            <p> Made with ❤️ by Ishani Kundu</p>
+        <footer className="bg-blue-50 py-8">
+          <div className="flex items-center justify-center mx-auto px-4 text-center text-gray-500">
+            <img src="/favicon.png" width={35}></img><p className="pl-3"> Copyright © Ishani Kundu 2025 | All rights reserved.</p>
           </div>
         </footer>
       </body>
