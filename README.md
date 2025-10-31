@@ -32,12 +32,9 @@ From **tracking daily expenses** to **analyzing monthly trends**, the app ensure
 - **Transaction Management:** Category-based organization and filters.  
 
 
-## Screenshots *(optional)*  
-You can include images or mockups like:  
+<!--## Screenshots *(optional)*  
+You can include images or mockups like:  -->
 
-
-
----
 
 ## Installation & Setup  
 Follow these steps to run Prospr locally:
