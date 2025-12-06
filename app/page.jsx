@@ -12,12 +12,12 @@ export default function Home() {
         
       <HeroSection/>
 
-      <section className="py-20 bg-blue-50">
+      <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {statsData.map((statsData, index) =>(
               <div key={index} className="text-center">
-                <div className="text-4xl font-serif  text-blue-600 mb-2">
+                <div className="text-4xl font-serif  text-gray-700 mb-2">
                   {statsData.value}</div>
                 <div className="text-gray-600">{statsData.label}</div>
               </div>
@@ -43,7 +43,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 bg-blue-50">
+      <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-semibold text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -81,12 +81,12 @@ export default function Home() {
       </section>
 
 
-      <section className="py-20 bg-blue-600">
+      <section className="py-20 bg-gradient-to-br from-[#bbd2cf] via-[#536976] to-[#292e49]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-semibold text-white text-center mb-4">Your Smarter Financial Future Starts Today.</h2>
           <p className="text-blue-100 mb-8 max-w-2xl mx-auto">Don't just track expenses-predict, plan, and prosper with AI-powered insights.</p>
           <Link href="/dashboard">
-          <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-100 animate-bounce">
+          <Button size="lg" className="bg-white text-slate-800 hover:bg-blue-100 animate-bounce">
             Get Started for Free
           </Button>
           </Link>
